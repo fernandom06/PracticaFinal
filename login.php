@@ -1,8 +1,9 @@
 <?php
+include "funciones.php";
 if (isset($_POST["login"])==false || isset($_POST["pass"])==false){
     header("location:index.php");
 }else {
-    $login = $_POST["login"];
+    $login = no_sqli($_POST["login"]);
 }
 
 //conexion a la bbdd
@@ -24,7 +25,7 @@ if(!($res_salt=$mysqli->query($salt))){
 }
 
 $_POST["pass"].=$res_salt->fetch_assoc()["salt"];
-$password = sha1($_POST["pass"]);
+$password = sha1(no_sqli($_POST["pass"]));
 
 $sql="SELECT count(*) numero,id_usuario FROM usuarios WHERE login='$login' AND password='$password'";
 
